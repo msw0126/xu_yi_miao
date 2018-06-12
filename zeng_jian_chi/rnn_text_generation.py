@@ -105,42 +105,42 @@ if __name__ == '__main__':
     print( len( corpus ) )
     print( corpus[:3] )
     #todo 词向量训练与lstm模型训练，有bug
-    w2v_model = Word2Vec( corpus, size=128, window=5, min_count=1, workers=multiprocessing.cpu_count() )
-    print(w2v_model['北京首都开发股份有限公司'])
-    raw_input = [item for sublist in corpus for item in sublist]
-    text_stream = []
-    vocab = w2v_model.vocab
-    for word_text in raw_input:
-        print( "--------------------------" )
-        print( vocab[100] )
-        print(word_text)
-        if word_text in vocab:
-            text_stream.append( word_text )
-    print(len( text_stream ))
-
-    #构建训练测试集
-    seq_length = 10
-    x = []
-    y = []
-    for i in range( 0, len( text_stream ) - seq_length ):
-        given = text_stream[i:i + seq_length]
-        predict = text_stream[i + seq_length]
-        x.append( np.array( [w2v_model[word] for word in given] ) )
-        y.append( w2v_model[predict] )
-    x = np.reshape( x, (-1, seq_length, 128) )
-    y = np.reshape( y, (-1, 128) )
-
-    #模型构建
-    model = Sequential()
-    model.add( LSTM( 256, dropout_W=0.2, dropout_U=0.2, input_shape=(seq_length, 128) ) )
-    model.add( Dropout( 0.2 ) )
-    model.add( Dense( 128, activation='sigmoid' ) )
-    model.compile( loss='mse', optimizer='adam' )
-
-    #跑模型
-    model.fit( x, y, nb_epoch=50, batch_size=4096 )
-
-    #测试模型
-    init = '证券代码：000672证券简称：上峰水泥公告编号：2014-24'
-    article = generate_article( init )
-    print( '证券代码：000672证券简称：上峰水泥公告编号：2014-24', "===>", article)
+    # w2v_model = Word2Vec( corpus, size=128, window=5, min_count=1, workers=multiprocessing.cpu_count() )
+    # print(w2v_model['北京首都开发股份有限公司'])
+    # raw_input = [item for sublist in corpus for item in sublist]
+    # text_stream = []
+    # vocab = w2v_model.vocab
+    # for word_text in raw_input:
+    #     print( "--------------------------" )
+    #     print( vocab[100] )
+    #     print(word_text)
+    #     if word_text in vocab:
+    #         text_stream.append( word_text )
+    # print(len( text_stream ))
+    #
+    # #构建训练测试集
+    # seq_length = 10
+    # x = []
+    # y = []
+    # for i in range( 0, len( text_stream ) - seq_length ):
+    #     given = text_stream[i:i + seq_length]
+    #     predict = text_stream[i + seq_length]
+    #     x.append( np.array( [w2v_model[word] for word in given] ) )
+    #     y.append( w2v_model[predict] )
+    # x = np.reshape( x, (-1, seq_length, 128) )
+    # y = np.reshape( y, (-1, 128) )
+    #
+    # #模型构建
+    # model = Sequential()
+    # model.add( LSTM( 256, dropout_W=0.2, dropout_U=0.2, input_shape=(seq_length, 128) ) )
+    # model.add( Dropout( 0.2 ) )
+    # model.add( Dense( 128, activation='sigmoid' ) )
+    # model.compile( loss='mse', optimizer='adam' )
+    #
+    # #跑模型
+    # model.fit( x, y, nb_epoch=50, batch_size=4096 )
+    #
+    # #测试模型
+    # init = '证券代码：000672证券简称：上峰水泥公告编号：2014-24'
+    # article = generate_article( init )
+    # print( '证券代码：000672证券简称：上峰水泥公告编号：2014-24', "===>", article)
