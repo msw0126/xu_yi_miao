@@ -24,6 +24,12 @@ class ClassifyTableTxt(object):
         self.md.ignore_links = True
         self.md.ignore_images = True
         self.md.single_line_break = True
+        self.md.wrap_links = False
+        self.md.unicode_snob = True  # Prevents accents removing
+        self.md.skip_internal_links = True
+        self.md.ignore_anchors = True
+        self.md.body_width = 0
+        self.md.use_automatic_links = True
 
     def read_file(self, file_path):
         """
@@ -45,11 +51,22 @@ class ClassifyTableTxt(object):
 
     def html_into_text(self, html_data):
         """
-        HTML转TXT文本
+        HTML转txt,并保存为一行
         :param html_data:
         :return:
         """
-        return html2text.html2text( html_data )
+        try:
+            return self.md.handle( html_data ).replace( '\n', '' ).replace( '\r', '' ).replace( '\t', '' ).replace( ' ', '' )
+        except:
+            raise Exception
+
+    # def html_into_text(self, html_data):
+    #     """
+    #     HTML转TXT文本
+    #     :param html_data:
+    #     :return:
+    #     """
+    #     return html2text.html2text( html_data )
 
     def classify_table_txt(self, html_path):
         """
